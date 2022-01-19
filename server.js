@@ -6,6 +6,10 @@ const path = require('path');
 const express = require('express');
 const PORT = process.env.PORT || 3001;
 const app = express();
+
+
+// middleware that instructs the server to make certain files readily available and to not gate it behind a server endpoint
+app.use(express.static('public'));
 // parse incoming string or array data
 app.use(express.urlencoded({ extended: true }));
 // parse incoming JSON data
@@ -103,6 +107,31 @@ app.get('/api/animals/:id', (req, res) => {
     }
 });
 
+
+// ADDING A GET ROUTE FOR THE INDEX HOMEPAGE
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, './public/index.html'));
+});
+
+// ADDING A GET ROUTE FOR THE ANIMALS PAGE
+app.get('/animals', (req, res) => {
+    res.sendFile(path.join(__dirname, './public/animals.html'));
+});
+
+// ADDING A GET ROUTE FOR THE ZOOKEEPERS PAGE
+app.get('/zookeepers', (req, res) => {
+    res.sendFile(path.join(__dirname, './public/zookeepers.html'));
+});
+
+//ADDING A WILCARD ROUTE I.E ROUTES THAT DO NOT EXIST
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, './public/index.html'));
+});
+
+
+
+
+// POST METHOD
 app.post('/api/animals', (req, res) => {
     // set id based on what the next index of the array will be
     req.body.id = animals.length.toString();
